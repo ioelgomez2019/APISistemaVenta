@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-
+//nos quedamos aqui
 namespace SistemaVenta.DAL.DBContext;
 
 public partial class DbventaContext : DbContext
