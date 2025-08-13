@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace SistemaVenta.Model;
+namespace SistemaVenta.DAL.DBContext;
 
 public partial class DbventaContext : DbContext
 {
