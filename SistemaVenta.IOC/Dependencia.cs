@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using SistemaVenta.DAL.DBContext;
 
 namespace SistemaVenta.IOC
 {
     public static class Dependencia
     {
-        public static void InyectarDependencias(this IservicesCollection services, IConfiguration configuration) {
+        public static void InyectarDependencias(this IServiceCollection services, IConfiguration configuration)
+        {
             services.AddDbContext<DbventaContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("CadenaSQL"));
+                options.UseSqlServer(configuration.GetConnectionString("cadenaSQL"));
             });
         }
     }
