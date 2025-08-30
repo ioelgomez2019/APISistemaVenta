@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.InyectarDependencias(builder.Configuration);
 
+
 var app = builder.Build();
 
 // Middleware de Swagger (siempre habilitado)
