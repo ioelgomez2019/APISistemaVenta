@@ -31,27 +31,100 @@ namespace SistemaVenta.BLL.Servicios
                 var listaUsuarios = queryUsuario.Include(rol => rol.IdRolNavigation).ToList();
                 return _mapper.Map<List<UsuarioDTO>>(listaUsuarios);
             }
-            catch { throw; }
+            catch { 
+                throw; 
+            }
         }
 
-        public Task<SesionDTO> ValidarCredenciales(string correo, string clave)
+        public async Task<SesionDTO> ValidarCredenciales(string correo, string clave)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var queryUsuario = await _usuarioRepositorio.Consultar( u =>
+                    u.Correo == correo && 
+                    u.Clave == clave
+                );
+                if (queryUsuario.FirstOrDefault()== null)
+                    throw new TaskCanceledException("No se encontro el usuario");
+
+                Usuario devolverUsuario = queryUsuario.Include(rol => rol.IdRolNavigation).First();
+
+                return _mapper.Map<SesionDTO>(devolverUsuario);
+
+            }
+            catch
+            {
+                throw;
+            }
+            //throw new NotImplementedException();
         }
 
-        public Task<UsuarioDTO> Crear(UsuarioDTO modelo)
+        public async Task<UsuarioDTO> Crear(UsuarioDTO modelo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var usuarioCreado = await _usuarioRepositorio.Crear(_mapper.Map<Usuario>(modelo));
+                if (usuarioCreado.IdUsuario == 0)
+                    throw new TaskCanceledException("No se pudo crear el usuario");
+
+                var query = await _usuarioRepositorio.Consultar(u => u.IdUsuario == usuarioCreado.IdUsuario);
+
+                usuarioCreado = query.Include(rol => rol.IdRolNavigation).First();
+                return _mapper.Map<UsuarioDTO>(usuarioCreado);
+            }
+            catch
+            {
+                throw;
+                //throw new NotImplementedException();
+            }
         }
 
-        public Task<bool> Editar(UsuarioDTO modelo)
+        public async Task<bool> Editar(UsuarioDTO modelo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var usuarioModelo = _mapper.Map<Usuario>(modelo);
+                var usuarioEncontrado = await _usuarioRepositorio.Obtener(u => u.IdUsuario == usuarioModelo.IdUsuario);
+
+                if (usuarioEncontrado == null)
+                    throw new TaskCanceledException("No se encontro el usuario");
+                usuarioEncontrado.NombreCompleto = usuarioModelo.NombreCompleto;
+                usuarioEncontrado.Correo = usuarioModelo.Correo;   
+                usuarioEncontrado.IdRol = usuarioModelo.IdRol;  
+                usuarioEncontrado.Clave = usuarioModelo.Clave;
+                usuarioEncontrado.EsActivo = usuarioModelo.EsActivo;
+
+                bool respuesta = await _usuarioRepositorio.Editar(usuarioEncontrado);
+
+                if (!respuesta)
+                    throw new TaskCanceledException("No se pudo editar el usuario");
+                return respuesta;
+            }
+            catch {                 
+                throw;
+            }   
+
         }
 
-        public Task<bool> Eliminar(int id)
+        public async Task<bool> Eliminar(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var usuarioEncontrado = await _usuarioRepositorio.Obtener(u => u.IdUsuario == id);
+
+                if (usuarioEncontrado == null)
+                    throw new TaskCanceledException("No se encontro el usuario");
+                bool respuesta = await _usuarioRepositorio.Eliminar(usuarioEncontrado);
+
+                if (!respuesta)
+                    throw new TaskCanceledException("No se pudo eliminar el usuario");
+                return respuesta;
+
+            }
+            catch
+            {
+                throw;
+            }
         }
 
 
