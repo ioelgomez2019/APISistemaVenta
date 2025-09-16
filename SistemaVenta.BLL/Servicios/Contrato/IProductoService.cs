@@ -8,7 +8,7 @@ using SistemaVenta.DTO;
 
 namespace SistemaVenta.BLL.Servicios.Contrato
 {
-    internal interface IProductoService
+    public interface IProductoService
     {
         Task<List<ProductoDTO>> Lista();
         Task<ProductoDTO> Crear(ProductoDTO modelo);

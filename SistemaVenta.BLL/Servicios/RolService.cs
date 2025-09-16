@@ -13,7 +13,7 @@ using SistemaVenta.Model;
 
 namespace SistemaVenta.BLL.Servicios
 {
-    internal class RolService:IRolService
+    public class RolService:IRolService
     {
         //click derecho a las declaraciones y sleccion acciones rapidas 
         private readonly IGenericRepository<Rol> _rolRepositorio;
